@@ -39,7 +39,7 @@ class Tagger:
     def ask_mistral(self, file_path: str, tag_path: str) -> None:
         data = Tagger._read_file(file_path)
         current_tags = self._read_file_into_list(tag_path)
-j
+
         api_key = os.getenv("MISTRAL_API_KEY")
         model = "mistral-medium"
 

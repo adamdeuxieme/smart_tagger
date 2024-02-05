@@ -7,7 +7,7 @@ class Prompt:
         self.user_prompt = user_prompt
 
 
-class PromptProvider(ABC):
+class AbstractPromptProvider(ABC):
 
     def __init__(self):
         super().__init__()

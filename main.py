@@ -1,11 +1,11 @@
 import argparse
 
 from ai import MistralAi, MistralAiModel
+from bat_creator import BatCreator
 from tagger import Tagger, TaggerValidator
 
 
 def main():
-
     # Manager args
     parser = argparse.ArgumentParser()
     subparser = parser.add_subparsers(dest='command')
@@ -17,6 +17,12 @@ def main():
     tag_parser.add_argument('--model', '-m', type=MistralAiModel, required=False)
     tag_parser.add_argument('--mistralai', action="store_true")
     tag_parser.add_argument('--chatgpt', action="store_true")
+    bat_parser = subparser.add_parser("bat")
+    bat_parser.add_argument('--mainPath', '-f', type=str, required=True)
+    bat_parser.add_argument('--tagPath', '-t', type=str, required=False)
+    bat_parser.add_argument('--outputPath', '-o', type=str, required=False)
+    bat_parser.add_argument('--tagNumber', '-tn', type=int, required=False)
+    bat_parser.add_argument('--folderScope', action="store_true")
     args = parser.parse_args()
 
     if args.command == 'tag':
@@ -34,6 +40,12 @@ def main():
             print("Not implemented yet. For now, use mistralai instead.")
         else:
             print("Artificial Intelligence to use not specified. Please specify it.")
+
+    if args.command == 'bat':
+        if args.folderScope:
+            BatCreator.create_bat_script_folder(args.mainPath, args.tagPath, args.tagNumber)
+        else:
+            BatCreator.create_bat_script(args.mainPath, args.tagPath, args.outputPath, args.tagNumber)
 
 
 if __name__ == '__main__':

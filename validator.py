@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 
-class Validator(ABC):
+class AbstractValidator(ABC):
 
     @abstractmethod
     def validate(self, txt: str) -> bool:

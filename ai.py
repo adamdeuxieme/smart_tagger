@@ -6,12 +6,12 @@ from mistralai.client import MistralClient
 from mistralai.models.chat_completion import ChatMessage
 
 from prompt_provider import Prompt
-from validator import AbstractValidator, NotValidException
+from validator import AbstractValidator
 
 
 class AbstractAi(ABC):
 
-    def __init__(self, temperature: float = 0.0, validator: AbstractValidator = None):
+    def __init__(self, temperature: float = 0.0, validator: AbstractValidator[str] = None):
         self._temperature = temperature
         self._validator = validator
 
@@ -26,27 +26,23 @@ class AbstractAi(ABC):
         self._temperature = new_value
 
     @property
-    def validator(self) -> AbstractValidator:
+    def validator(self) -> AbstractValidator[str]:
         return self._validator
 
     @validator.setter
-    def validator(self, validator: AbstractValidator) -> None:
-        if validator is not isinstance(validator, AbstractValidator):
+    def validator(self, validator: AbstractValidator[str]) -> None:
+        if not isinstance(validator, AbstractValidator):
             raise ValueError("Validator is not an instance of Validator.")
 
     def compute(self, prompt: Prompt) -> str:
         value_computed = self._compute(prompt)
         if self.validator:
-            self._validator.validate(value_computed)
+            self._validator.validate(input_value=value_computed, raise_error=True)
         return value_computed
 
     @abstractmethod
     def _compute(self, prompt: Prompt) -> str:
         pass
-
-    def _validate(self, response: str) -> None:
-        if not self._validator.validate(response):
-            raise NotValidException()
 
 
 class MistralAiModel(Enum):
@@ -59,10 +55,11 @@ class MistralAi(AbstractAi):
 
     def __init__(self,
                  temperature: float,
-                 validator: AbstractValidator,
+                 validator: AbstractValidator[str],
                  model: MistralAiModel = None):
 
         super().__init__(temperature, validator)
+
         # Set api key
         self.api_key = os.getenv("MISTRAL_API_KEY")
         if not self.api_key:
@@ -71,7 +68,7 @@ class MistralAi(AbstractAi):
         # Set model
         if model is None:
             model = MistralAiModel.SMALL
-        elif model is not isinstance(model, MistralAiModel):
+        elif not isinstance(model, MistralAiModel):
             raise ValueError("The model must be an instance of MistralAiModel.")
         self._model = model
 
@@ -87,7 +84,7 @@ class MistralAi(AbstractAi):
 
     @model.setter
     def model(self, model: MistralAiModel):
-        if model is not isinstance(model, MistralAiModel):
+        if not isinstance(model, MistralAiModel):
             raise ValueError("The model must be an instance of MistralAiModel.")
         self._model = model
 

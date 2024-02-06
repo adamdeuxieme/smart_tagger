@@ -1,6 +1,6 @@
 import json
 import os
-from typing import AnyStr, List
+from typing import AnyStr, List, override
 
 from ai import AbstractAi
 from prompt_provider import AbstractPromptProvider, Prompt
@@ -16,7 +16,6 @@ class TaggerPromptProvider(AbstractPromptProvider):
                          tag_number: int,
                          current_tags: [str],
                          data: str) -> Prompt:
-
         tag_number = 5 if tag_number is None else tag_number
 
         system_instruction = ("Your answer will only contains this json format only :"
@@ -40,20 +39,21 @@ class TaggerPromptProvider(AbstractPromptProvider):
         return Prompt(system_prompt=system_instruction, user_prompt=user_instruction)
 
 
-class TaggerValidator(AbstractValidator):
+class TaggerValidator(AbstractValidator[str]):
 
     def __init__(self):
         super().__init__()
 
-    def validate(self, txt: str) -> bool:
+    @staticmethod
+    @override
+    def _validate(input_value: str) -> bool:
         try:
-            tags = json.loads(txt)
+            tags = json.loads(input_value)
         except Exception as e:
             print(f"Error parsing: {e}")
             return False
-
-        return (tags["tags"][0].count("#") != 1
-                or tags["tags"][0].count(" ") != 0)
+        return not (tags["tags"][0].count("#") != 1
+                    or tags["tags"][0].count(" ") != 0)
 
 
 class Tagger:

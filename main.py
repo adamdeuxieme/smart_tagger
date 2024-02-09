@@ -1,7 +1,8 @@
 import argparse
 
-from ai import MistralAi, MistralAiModel
+from ai import MistralAi, MistralAiModel, ChatGptAi, ChatGPTModel
 from bat_creator import BatCreator
+from prompt_provider import Prompt
 from tagger import Tagger, TaggerValidator
 
 
@@ -37,11 +38,17 @@ def main():
             tagger.tag_file(args.filePath, args.tagPath, args.tagNumber)
 
         elif args.chatgpt:
-            print("Not implemented yet. For now, use mistralai instead.")
+            chat_gpt_ai = ChatGptAi(
+                args.temperature,
+                TaggerValidator(),
+                ChatGPTModel.GPT3_turbo_flagship
+            )
+            tagger = Tagger(chat_gpt_ai)
+            tagger.tag_file(args.filePath, args.tagPath, args.tagNumber)
         else:
             print("Artificial Intelligence to use not specified. Please specify it.")
 
-    if args.command == 'bat':
+    elif args.command == 'bat':
         if args.folderScope:
             BatCreator.create_bat_script_folder(args.mainPath, args.tagPath, args.tagNumber)
         else:

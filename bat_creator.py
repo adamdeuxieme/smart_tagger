@@ -54,16 +54,16 @@ class BatCreator:
             raise ValueError("The model is not an instance of AiEnum!")
 
         script = ("@echo off\n"
-                  f"python {main_folder_path}\\main.py tag "
+                  f"python \"{main_folder_path}\\main.py\" tag "
                   "-f \"%~1\" "
-                  f"-t {tags_folder_path}\\tags.md "
+                  f"-t \"{tags_folder_path}\\tags.md\" "
                   f"-tn {tag_number} "
                   f"{model.value} "
                   "> "
-                  f"{tmp_folder_path}\\output.txt\n"
-                  f"type {tmp_folder_path}\\output.txt\n"
+                  f"\"{tmp_folder_path}\\output.txt\"\n"
+                  f"type \"{tmp_folder_path}\\output.txt\"\n"
                   "pause\n"
-                  f"del {tmp_folder_path}\\output.txt\n")
+                  f"del \"{tmp_folder_path}\\output.txt\"\n")
         return script
 
     @staticmethod
@@ -99,9 +99,9 @@ class BatCreator:
                   "for %%i in (*.md) do (\n    "
                   "set /a \"total+=1\"\n    "
                   "if /I not \"%%~nxi\"==\"%exclude%\" (\n        "
-                  f"python {main_folder_path}\\main.py tag "
+                  f"python \"{main_folder_path}\\main.py\" tag "
                   f"-f \"%%i\" "
-                  f"-t {tags_folder_path}\\tags.md "
+                  f"-t \"{tags_folder_path}\\tags.md\" "
                   f"-tn {tag_number} "
                   f"{model.value} "
                   "> nul\n        "

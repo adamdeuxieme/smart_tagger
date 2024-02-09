@@ -24,6 +24,7 @@ class TaggerPromptProvider(AbstractPromptProvider):
                               + os.linesep + "}" + os.linesep
                               + "Each tag start with '#' and follow CamelCase. "
                               + "(An example: '#ThisIsATag'). "
+                              +  "Tags are always singular! "
                               + "Warning! Do not write anything after the json. "
                               + "Your response will be interpreted by a Software. "
                               + "The user will provide you a list of existing tags. "
@@ -66,7 +67,7 @@ class Tagger:
 
     @staticmethod
     def _read_file(file_path: str) -> AnyStr:
-        with open(file_path, 'r') as file:
+        with open(file_path, 'r', encoding='utf-8') as file:
             data = file.read()
         return data
 
@@ -89,6 +90,7 @@ class Tagger:
         determined_tags = chat_response_values["tags"]
 
         with open(file_path, 'a') as file:
+            file.write("\n")
             file.write("_tags_ : " + " ".join(determined_tags))
 
         print(f"Determined tags: {determined_tags}")

@@ -22,7 +22,8 @@ class TaggerPromptProvider(AbstractPromptProvider):
                               + os.linesep + "{" + os.linesep
                               + "\"tags\" : [#tag1, #tag2, ...]"
                               + os.linesep + "}" + os.linesep
-                              + "Each tag start with '#' and follow CamelCase."
+                              + "Each tag start with '#' and follow CamelCase. "
+                              + "(An example: '#ThisIsATag'). "
                               + "Warning! Do not write anything after the json. "
                               + "Your response will be interpreted by a Software. "
                               + "The user will provide you a list of existing tags. "
@@ -88,7 +89,6 @@ class Tagger:
         determined_tags = chat_response_values["tags"]
 
         with open(file_path, 'a') as file:
-            file.write(os.linesep)
             file.write("_tags_ : " + " ".join(determined_tags))
 
         print(f"Determined tags: {determined_tags}")

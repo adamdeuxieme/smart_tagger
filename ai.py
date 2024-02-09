@@ -14,7 +14,11 @@ from validator import AbstractValidator
 
 class AbstractAi(ABC):
 
-    def __init__(self, temperature: float = 0.0, validator: AbstractValidator[str] = None):
+    def __init__(self, temperature: Union[float, None] = None, validator: AbstractValidator[str] = None):
+        if temperature is None:
+            temperature = 0.0
+        elif not isinstance(temperature, float):
+            raise TypeError("Temperature must be a float!")
         self._temperature = temperature
         self._validator = validator
 
@@ -24,8 +28,10 @@ class AbstractAi(ABC):
 
     @temperature.setter
     def temperature(self, new_value: float) -> None:
+        if not isinstance(new_value, float):
+            raise TypeError("Temperature must be a float!")
         if new_value < 0.0 or new_value > 1.0:
-            raise ValueError("Temperature must be between 0.0 and 1.0.")
+            raise ValueError("Temperature must be between 0.0 and 1.0!")
         self._temperature = new_value
 
     @property

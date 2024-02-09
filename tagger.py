@@ -22,7 +22,7 @@ class TaggerPromptProvider(AbstractPromptProvider):
                               + os.linesep + "{" + os.linesep
                               + "\"tags\" : [#tag1, #tag2, ...]"
                               + os.linesep + "}" + os.linesep
-                              + "Each tag start with '#' and space are '_' with no escape symbol."
+                              + "Each tag start with '#' and follow CamelCase."
                               + "Warning! Do not write anything after the json. "
                               + "Your response will be interpreted by a Software. "
                               + "The user will provide you a list of existing tags. "

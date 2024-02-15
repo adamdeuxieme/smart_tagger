@@ -1,9 +1,12 @@
 import argparse
+import sys
 
+import custom_log
 from ai import MistralAi, MistralAiModel, ChatGptAi, ChatGPTModel
 from bat_creator import BatCreator, AiEnum
-from prompt_provider import Prompt
 from tagger import Tagger, TaggerValidator
+
+logger = custom_log.get_logger(__name__)
 
 
 def main():
@@ -34,25 +37,34 @@ def main():
 
     if args.command == 'tag':
         if args.mistralai:
-            print(f"Args was: {args}")
-            mistralai = MistralAi(
-                temperature=args.temperature,
-                validator=TaggerValidator(),
-                model=args.model
-            )
+            logger.info(f"Args was: {args}")
+            try:
+                mistralai = MistralAi(
+                    temperature=args.temperature,
+                    validator=TaggerValidator(),
+                    model=args.model
+                )
+            except ValueError as e:
+                logger.error(e)
+                sys.exit(1)
             tagger = Tagger(mistralai)
             tagger.tag_file(args.filePath, args.tagPath, args.tagNumber)
 
         elif args.chatgpt:
-            chat_gpt_ai = ChatGptAi(
-                args.temperature,
-                TaggerValidator(),
-                ChatGPTModel.GPT3_turbo_flagship
-            )
+            try:
+                chat_gpt_ai = ChatGptAi(
+                    args.temperature,
+                    TaggerValidator(),
+                    ChatGPTModel.GPT3_turbo_flagship
+                )
+            except ValueError as e:
+                logger.error(e)
+                sys.exit(1)
             tagger = Tagger(chat_gpt_ai)
             tagger.tag_file(args.filePath, args.tagPath, args.tagNumber)
         else:
-            print("Artificial Intelligence to use not specified. Please specify it.")
+            logger.error("Artificial Intelligence to use not specified. Please specify it.")
+            sys.exit(1)
 
     elif args.command == 'bat':
         model = None

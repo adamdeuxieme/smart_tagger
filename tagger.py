@@ -2,9 +2,12 @@ import json
 import os
 from typing import AnyStr, List, override
 
+import custom_log
 from ai import AbstractAi
 from prompt_provider import AbstractPromptProvider, Prompt
 from validator import AbstractValidator
+
+logger = custom_log.get_logger(__name__)
 
 
 class TaggerPromptProvider(AbstractPromptProvider):
@@ -24,7 +27,7 @@ class TaggerPromptProvider(AbstractPromptProvider):
                               + os.linesep + "}" + os.linesep
                               + "Each tag start with '#' and follow CamelCase. "
                               + "(An example: '#ThisIsATag'). "
-                              +  "Tags are always singular! "
+                              + "Tags are always singular! "
                               + "Warning! Do not write anything after the json. "
                               + "Your response will be interpreted by a Software. "
                               + "The user will provide you a list of existing tags. "
@@ -52,7 +55,7 @@ class TaggerValidator(AbstractValidator[str]):
         try:
             tags = json.loads(input_value)
         except Exception as e:
-            print(f"Error parsing: {e}")
+            logger.error(f"Error parsing: {e}")
             return False
         return not (tags["tags"][0].count("#") != 1
                     or tags["tags"][0].count(" ") != 0)
@@ -93,10 +96,10 @@ class Tagger:
             file.write("\n")
             file.write("_tags_ : " + " ".join(determined_tags))
 
-        print(f"Determined tags: {determined_tags}")
+        logger.info(f"Determined tags: {determined_tags}")
         new_tags = list(set(determined_tags) - set(current_tags))
-        print(f"Number of new tags: {len(new_tags)}")
-        print(f"Number of old tags: {len(determined_tags) - len(new_tags)}")
+        logger.info(f"Number of new tags: {len(new_tags)}")
+        logger.info(f"Number of old tags: {len(determined_tags) - len(new_tags)}")
 
         # Write each new_tag to the file at "tag_path"
         if len(new_tags) != 0:

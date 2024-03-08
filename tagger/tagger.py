@@ -2,12 +2,12 @@ import json
 import os
 from typing import AnyStr, List, override
 
-import custom_log
-from ai import AbstractAi
-from prompt_provider import AbstractPromptProvider, Prompt
-from validator import AbstractValidator
+from core import log
+from ai.abstract import AbstractAi
+from ai import AbstractPromptProvider, Prompt
+from utils import AbstractValidator
 
-logger = custom_log.get_logger(__name__)
+logger = log.get_logger(__name__)
 
 
 class TaggerPromptProvider(AbstractPromptProvider):
@@ -52,6 +52,7 @@ class TaggerValidator(AbstractValidator[str]):
     @staticmethod
     @override
     def _validate(input_value: str) -> bool:
+        logger.info("Start validating.")
         try:
             tags = json.loads(input_value)
         except Exception as e:

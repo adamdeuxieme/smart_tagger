@@ -1,12 +1,12 @@
 import argparse
 import sys
 
-import custom_log
-from ai import MistralAi, MistralAiModel, ChatGptAi, ChatGPTModel
-from bat_creator import BatCreator, AiEnum
+from core import log
+from ai import AiEnum, MistralAi, MistralAiModel, ChatGptAi, ChatGPTModel
+from tagger import BatCreator
 from tagger import Tagger, TaggerValidator
 
-logger = custom_log.get_logger(__name__)
+logger = log.get_logger(__name__)
 
 
 def main():

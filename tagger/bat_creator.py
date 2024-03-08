@@ -1,11 +1,7 @@
 import os
-from enum import Enum
 from typing import Union
 
-
-class AiEnum(Enum):
-    MISTRAL = "--mistralai"
-    CHATGPT = "--chatgpt"
+from ai import AiEnum
 
 
 class BatCreator:

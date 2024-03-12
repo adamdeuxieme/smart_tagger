@@ -1,12 +1,12 @@
 import argparse
 import sys
 
-from core import log
+import core
 from ai import AiEnum, MistralAi, MistralAiModel, ChatGptAi, ChatGPTModel
 from tagger import BatCreator
 from tagger import Tagger, TaggerValidator
 
-logger = log.get_logger(__name__)
+logger = core.get_logger(__name__)
 
 
 def main():

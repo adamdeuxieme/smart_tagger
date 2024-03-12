@@ -11,7 +11,9 @@ class CustomFormatter(logging.Formatter):
         "bold_red": "\x1b[31;1m",
         "reset": "\x1b[0m"
     }
+
     log_pattern = "[%(asctime)s]%(levelname)7s[%(filename)20s:%(lineno)4s - %(funcName)15s()]:%(message)s"
+
     FORMATS = {
         logging.DEBUG: color_codes["green"] + log_pattern + color_codes["reset"],
         logging.INFO: color_codes["grey"] + log_pattern + color_codes["reset"],
@@ -37,7 +39,15 @@ logger.propagate = False
 
 
 def get_logger(log_name: str = "") -> logging.Logger:
+    """
+    Provide a logger.
+    :param log_name: Name of the logger (not the displayed name in logs).
+    :return: The logger.
+    """
+
     if not log_name:
         return logging.getLogger("smart_tagger")
+
     new_logger = logging.getLogger(f"smart_tagger.{log_name}")
+
     return new_logger

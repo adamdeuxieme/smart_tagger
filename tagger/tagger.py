@@ -33,6 +33,7 @@ class TaggerPromptProvider(AbstractPromptProvider):
                               + "The user will provide you a list of existing tags. "
                               + "Use a maximum of pertinent tags from this list. "
                               + os.linesep)
+
         user_instruction = (f"Determine {tag_number} tags for this markdown"
                             f"file below based on your analysis and on this list:"
                             + os.linesep

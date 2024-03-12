@@ -55,6 +55,7 @@ class MistralAi(AbstractAi):
         self._conversation_history.append(
             ChatMessage(role="system", content=prompt.system_prompt)
         )
+
         self._conversation_history.append(
             ChatMessage(role="user", content=prompt.user_prompt)
         )
@@ -64,5 +65,6 @@ class MistralAi(AbstractAi):
             messages=self._conversation_history,
             temperature=self.temperature,
         )
+
         return chat_response.choices[0].message.content
 

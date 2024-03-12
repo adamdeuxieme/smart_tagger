@@ -39,11 +39,14 @@ class ChatGptAi(AbstractAi):
         self._conversation_history.append(
             ChatCompletionSystemMessageParam(content=prompt.system_prompt, role="system")
         )
+
         self._conversation_history.append(
             ChatCompletionUserMessageParam(content=prompt.user_prompt, role="user")
         )
+
         completion = self._client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=self._conversation_history
         )
+
         return completion.choices[0].message.content

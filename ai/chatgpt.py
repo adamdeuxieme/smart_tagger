@@ -2,7 +2,8 @@ from enum import Enum
 from typing import Union
 
 from openai import OpenAI
-from openai.types.chat import ChatCompletionSystemMessageParam, ChatCompletionUserMessageParam
+from openai.types.chat import ChatCompletionSystemMessageParam, ChatCompletionUserMessageParam, \
+    ChatCompletionAssistantMessageParam
 
 from utils.validator import AbstractValidator
 from .abstract import AbstractAi, Prompt
@@ -47,6 +48,13 @@ class ChatGptAi(AbstractAi):
         completion = self._client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=self._conversation_history
+        )
+
+        self._conversation_history.append(
+            ChatCompletionAssistantMessageParam(
+                content=completion.choices[0].message.content,
+                role="assistant"
+            )
         )
 
         return completion.choices[0].message.content

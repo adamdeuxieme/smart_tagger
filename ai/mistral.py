@@ -52,9 +52,11 @@ class MistralAi(AbstractAi):
         self._model = model
 
     def _compute(self, prompt: Prompt) -> str:
-        self._conversation_history.append(
-            ChatMessage(role="system", content=prompt.system_prompt)
-        )
+
+        if prompt.system_prompt is not None:
+            self._conversation_history.append(
+                ChatMessage(role="system", content=prompt.system_prompt)
+            )
 
         self._conversation_history.append(
             ChatMessage(role="user", content=prompt.user_prompt)

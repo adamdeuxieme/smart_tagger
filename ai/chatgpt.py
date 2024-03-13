@@ -37,9 +37,11 @@ class ChatGptAi(AbstractAi):
         self._conversation_history = []
 
     def _compute(self, prompt: Prompt) -> str:
-        self._conversation_history.append(
-            ChatCompletionSystemMessageParam(content=prompt.system_prompt, role="system")
-        )
+
+        if prompt.system_prompt is not None:
+            self._conversation_history.append(
+                ChatCompletionSystemMessageParam(content=prompt.system_prompt, role="system")
+            )
 
         self._conversation_history.append(
             ChatCompletionUserMessageParam(content=prompt.user_prompt, role="user")

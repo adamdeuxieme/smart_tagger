@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
+from dataclasses import dataclass
 from enum import Enum
 from typing import Union
 
@@ -54,10 +55,10 @@ class AiEnum(Enum):
     CHATGPT = "--chatgpt"
 
 
+@dataclass
 class Prompt:
-    def __init__(self, system_prompt: str, user_prompt: str):
-        self.system_prompt = system_prompt
-        self.user_prompt = user_prompt
+    user_prompt: str
+    system_prompt: Union[str, None] = None
 
 
 class AbstractPromptProvider(ABC):

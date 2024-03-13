@@ -68,5 +68,12 @@ class MistralAi(AbstractAi):
             temperature=self.temperature,
         )
 
+        self._conversation_history.append(
+            ChatMessage(
+                role="assistant",
+                content=chat_response.choices[0].message.content
+            )
+        )
+
         return chat_response.choices[0].message.content
 
